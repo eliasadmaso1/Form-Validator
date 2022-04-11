@@ -5,15 +5,12 @@ const password = document.getElementById("password");
 const password2 = document.getElementById("password2");
 
 const checkEmail = (input) => {
-  const regex = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
-  if(regex.test(String(input))){
-    showSuccess(input)
+  const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+  if (regex.test(input.value)) {
+    showSuccess(input);
+  } else {
+    showError(input, "Email is not valid");
   }
-  else{
-    showError(input, 'Email is not valid')
-  }
-  
-
 };
 
 const showError = (input, message) => {
@@ -75,11 +72,18 @@ const checkPassword = (password) => {
   }
 };
 
+const checkPasswordsMatch = (input1, input2) => {
+  if (input1.value !== input2.value) {
+    showError(input2, "Passwords do not match");
+  }
+};
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   checkRequired([username, email, password2]);
   checkPassword(password);
   checkLength(password, 6, 15);
-  checkEmail(email)
+  checkEmail(email);
+  checkPasswordsMatch(password,password2)
 });
